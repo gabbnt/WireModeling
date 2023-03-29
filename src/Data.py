@@ -14,20 +14,20 @@ class Point:
         :param tuple coordinates : coordinates of the point
         :param ArrayLike basis_ : orthonormal base associated to the point for the previous coordinates
         """
-        coords=coordinates
-        dim=len(coordinates)
+        self.coords=coordinates
+        self.dim=len(coordinates)
         #if the basis is not precised, we assume it is the canonical basis
         if basis_==None:
             match self.dim:
                 case 1:
-                    basis=[np.array([1.])]
+                    self.basis=[np.array([1.])]
                 case 2:
-                    basis=[np.array([1.,0.]),np.array([0.,1.])]
+                    self.basis=[np.array([1.,0.]),np.array([0.,1.])]
                 case 3:
-                    basis=[np.array([1.,0.,0.]),np.array([0.,1.,0.]),np.array([0.,0.,1.])]
+                    self.basis=[np.array([1.,0.,0.]),np.array([0.,1.,0.]),np.array([0.,0.,1.])]
 
         else:
-            basis=basis_
+            self.basis=basis_
     
     def _get_canonical_basis(self):
         """
@@ -56,8 +56,10 @@ class Point:
         vector=self.coords[0]*self.basis[0]
         for i in range(1,self.dim):
             vector+=self.coords[i]*self.basis[i]
+        tab=[]
         for i in range(len(new_basis)):
-            self.coords[i]=np.dot(vector,new_basis[i])
+            tab.append(np.dot(vector,new_basis[i]))
+        self.coords=tuple(tab)
         self.basis=new_basis
 
     def print(self):
@@ -74,15 +76,15 @@ class Cloud:
         ### Parameters
         :param ArrayLike|Dataframe data_set : initial represention of the points
         """
-        length=len(data_set)
-        points=[]
+        self.length=len(data_set)
+        self.points=[]
         if type(data_set) == pd.core.frame.DataFrame:
             data=data_set.iloc
         else:
             data=data_set
-        for ind in range(length):
+        for ind in range(self.length):
             pnt=data[ind]
-            points.append(Point(tuple(pnt)))
+            self.points.append(Point(tuple(pnt)))
 
     def get_point(self,i:int):
         """
