@@ -1,4 +1,5 @@
-"""This file enables to create objects associated to the datasets. The clouds -- who will represent the different dataset -- are lists of Point objects."""
+"""This file enables to create objects associated to the datasets. The clouds -- who will represent
+ the different dataset -- are lists of Point objects."""
 
 import numpy as np
 import pandas as pd
@@ -18,9 +19,12 @@ class Point:
         #if the basis is not precised, we assume it is the canonical basis
         if basis_==None:
             match self.dim:
-                case 1:basis=[np.array([1.])]
-                case 2:basis=[np.array([1.,0.]),np.array([0.,1.])]
-                case 3:basis=[np.array([1.,0.,0.]),np.array([0.,1.,0.]),np.array([0.,0.,1.])]
+                case 1:
+                    basis=[np.array([1.])]
+                case 2:
+                    basis=[np.array([1.,0.]),np.array([0.,1.])]
+                case 3:
+                    basis=[np.array([1.,0.,0.]),np.array([0.,1.,0.]),np.array([0.,0.,1.])]
 
         else:
             basis=basis_
@@ -43,7 +47,8 @@ class Point:
         """
         Gives the coordinates of the point in a new orthonormal basis 
         ### Parameter
-        :param Arraylike new_basis : contains an orthonormal base (each vector being of type numpy Array), which we want to use for the point
+        :param Arraylike new_basis : contains an orthonormal base (each vector being of type numpy Array), 
+        which we want to use for the point
         :return: replace the former coordinates by the coordinates in the new basis
         """
         
