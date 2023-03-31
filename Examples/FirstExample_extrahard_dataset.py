@@ -5,7 +5,7 @@ import pandas as pd
 sys.path.append("..")
 from src.models import Model
 
-dataset=pd.read_parquet('..\datasets\lidar_cable_points_easy.parquet', engine='pyarrow')
+dataset=pd.read_parquet('..\datasets\lidar_cable_points_extrahard.parquet', engine='pyarrow')
 dataset=dataset.sort_index(axis = 0, ascending = True)
 dataset.dropna(how='any',inplace=True)
 dataset.reset_index(drop=True,inplace=True)

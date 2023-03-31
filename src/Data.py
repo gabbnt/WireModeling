@@ -119,7 +119,7 @@ class Cloud:
         :rtype: Point
         """
         if i>=0 and i<self.length:
-
+            self.length-=1
             return self.points.pop(i)
     
     def print(self,title:str="Display of the dataset",
