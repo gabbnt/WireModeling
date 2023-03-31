@@ -1,5 +1,5 @@
 """This file enables to create objects associated to the datasets. The 
-clouds -- who will represent the different dataset -- are lists of Point 
+clouds -- who will represent the different dataset -- contain lists of Point 
 objects."""
 
 import numpy as np
@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 class Point:
 
-    def __init__(self,coordinates:tuple,basis_ : np.ndarray|list = None):
+    def __init__(self,coordinates : tuple,basis_ : np.ndarray|list = None):
         """
         Create an object point from its coordinates in a specific basis
         ### Parameters
@@ -38,14 +38,7 @@ class Point:
 
         :return: canonical basis corresponding to the dimension of the space
         """
-        match self.dim:
-            case 1:
-                return [np.array([1.])]
-            case 2:
-                return [np.array([1.,0.]),np.array([0.,1.])]
-            case 3:
-                return [np.array([1.,0.,0.]),np.array([0.,1.,0.]),
-                        np.array([0.,0.,1.])]
+        return np.identity(self.dim)
 
     def change_basis(self,new_basis : list|np.ndarray):
         """
@@ -57,8 +50,6 @@ class Point:
         :return: replace the former coordinates by the coordinates in the new 
         basis
         """
-        
-        basis=self._get_canonical_basis()
         vector=self.coords[0]*self.basis[0]
         for i in range(1,self.dim):
             vector+=self.coords[i]*self.basis[i]
@@ -104,7 +95,7 @@ class Cloud:
         if i>=0 and i<self.length:
             return self.points[i]
     
-    def add_point(self,coords:tuple,basis_ : np.ndarray|list = None):
+    def add_point(self,coords:tuple,basis : np.ndarray|list = None):
         """
         Adds a point in the data set
 
@@ -115,7 +106,8 @@ class Cloud:
         :return: a point
         :rtype: Point
         """
-        self.points.append(Point(tuple,basis=basis_))
+        point=Point(coords,basis)
+        self.points.append(point)
         self.length+=1
     
     def remove_point(self,i:int):
@@ -127,7 +119,7 @@ class Cloud:
         :rtype: Point
         """
         if i>=0 and i<self.length:
-            self.length -=1
+
             return self.points.pop(i)
     
     def print(self,title:str="Display of the dataset",
@@ -140,36 +132,37 @@ class Cloud:
         display the dataset (if 3-dimensional)
         :return: a plot
         """
-        match self.dim:
+        match self.points[0].dim:
             case 1: 
-                X=[],Y=[]
+                X,Y=[],[]
                 for i in range(self.length):
                     pnt=self.get_point(i)
-                    X.append(pnt[0])
+                    X.append(pnt.coords[0])
                     Y.append(0.)
                 plt.figure()
                 plt.scatter(X,Y)
                 plt.xlabel("x axis")
             case 2: 
-                X=[],Y=[]
+                X,Y=[],[]
                 for i in range(self.length):
                     pnt=self.get_point(i)
-                    X.append(pnt[0])
-                    Y.append(pnt[1])
+                    X.append(pnt.coords[0])
+                    Y.append(pnt.coords[1])
                 plt.figure()
                 plt.scatter(X,Y)
                 plt.xlabel("x axis")
                 plt.ylabel("y axis")
             case 3: 
-                X=[],Y=[],Z=[]
+                X,Y,Z=[],[],[]
                 for i in range(self.length):
                     pnt=self.get_point(i)
-                    X.append(pnt[0])
-                    Y.append(pnt[1])
-                    Z.append(pnt[2])
+                    X.append(pnt.coords[0])
+                    Y.append(pnt.coords[1])
+                    Z.append(pnt.coords[2])
                 plt.figure()
-                plt.scatter(X,Y,Z)
-                plt.xlabel("x axis")
-                plt.ylabel("y axis")
-                plt.ylabel("y axis")
+                ax = plt.subplot(111, projection='3d')
+                ax.set_xlabel('x')
+                ax.set_ylabel('y')
+                ax.set_zlabel('z')
+                ax.view_init(rotation[0],rotation[1],rotation[2])
     plt.show()
